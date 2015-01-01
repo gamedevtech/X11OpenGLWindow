@@ -1198,7 +1198,6 @@ void Shutdown() {
 * https://github.com/blackberry/GamePlay/blob/master/gameplay%2Fsrc%2FPlatformLinux.cpp
 * http://www-h.eng.cam.ac.uk/help/tpl/graphics/X/X11R5/node25.html
 * http://tronche.com/gui/x/xlib/input/pointer-grabbing.html
-* https://github.com/gameplay3d/GamePlay/blob/master/gameplay%2Fsrc%2FPlatformLinux.cpp
 * http://tronche.com/gui/x/xlib/ICC/client-to-window-manager/XStoreName.html
 * http://tronche.com/gui/x/xlib/window/configure.html#XWindowChanges
 * http://tronche.com/gui/x/xlib/window/XConfigureWindow.html
