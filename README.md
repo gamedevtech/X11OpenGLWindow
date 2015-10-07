@@ -384,12 +384,11 @@ if (visual == 0) {
 	return 1;
 }
 ```
-When creating an OpenGL window the **XCreateSimpleWindow** function can no longer be used to create a window, instead the ```XCreateWindow(Display *display, Window parent, int x, int y, unsigned int width, unsigned int height, unsigned int border_width, int depth, unsigned int class, Visual *visual, unsigned long valuemask, XSetWindowAttributes *attributes);``` function must be used. The first argument is the display, the second argument is the parent of the window being created. Use the ```RootWindow(Display* display, int screen_number``` function to get this window. The x, y, width, height and border width paramaters are self explanatory. For the depth of the window use the depth field of the *XVisualInfo* class, the visual mask should be set to the *InputOutput* constant. Lastly a **XSetWindowAttributes** struct must be created. This struct describes all of the attributes the window will have. The following fields should be set: *border_pixel*, *background_pixel*, *override_redirect*, *colormap* and *event_mask*. The *colormap* field is very important, get it using the ```XCreateColormap(Display *display, Window w, Visual *visual, int alloc);``` function. The display and window are the same as always. The *Visual* object is contained within the *visual* field of the *XVisualInfo* object. Lastly the *alloc* argument should be set to the **AllocNone** constant.
+When creating an OpenGL window the **XCreateSimpleWindow** function can no longer be used to create a window, instead the ```XCreateWindow(Display *display, Window parent, int x, int y, unsigned int width, unsigned int height, unsigned int border_width, int depth, unsigned int class, Visual *visual, unsigned long valuemask, XSetWindowAttributes *attributes);``` function must be used. The first argument is the display, the second argument is the parent of the window being created. Use the ```RootWindow(Display* display, int screen_number``` function to get this window. The x, y, width, height and border width paramaters are self explanatory. For the depth of the window use the depth field of the *XVisualInfo* class, the visual mask should be set to the *InputOutput* constant. Lastly a **XSetWindowAttributes** struct must be created. This struct describes all of the attributes the window will have. The following fields should be set: *border_pixel*, *background_pixel*, *colormap* and *event_mask*. The *colormap* field is very important, get it using the ```XCreateColormap(Display *display, Window w, Visual *visual, int alloc);``` function. The display and window are the same as always. The *Visual* object is contained within the *visual* field of the *XVisualInfo* object. Lastly the *alloc* argument should be set to the **AllocNone** constant.
 ```
 XSetWindowAttributes windowAttribs;
 windowAttribs.border_pixel = BlackPixel(display, screenId);
 windowAttribs.background_pixel = WhitePixel(display, screenId);
-windowAttribs.override_redirect = True;
 windowAttribs.colormap = XCreateColormap(display, RootWindow(display, screenId), visual->visual, AllocNone);
 windowAttribs.event_mask = ExposureMask;
 window = XCreateWindow(display, RootWindow(display, screenId), 0, 0, 320, 200, 0, visual->depth, InputOutput, visual->visual, CWBackPixel | CWColormap | CWBorderPixel | CWEventMask, &windowAttribs);
@@ -485,7 +484,6 @@ int main(int argc, char** argv) {
 	XSetWindowAttributes windowAttribs;
 	windowAttribs.border_pixel = BlackPixel(display, screenId);
 	windowAttribs.background_pixel = WhitePixel(display, screenId);
-	windowAttribs.override_redirect = True;
 	windowAttribs.colormap = XCreateColormap(display, RootWindow(display, screenId), visual->visual, AllocNone);
 	windowAttribs.event_mask = ExposureMask;
 	window = XCreateWindow(display, RootWindow(display, screenId), 0, 0, 320, 200, 0, visual->depth, InputOutput, visual->visual, CWBackPixel | CWColormap | CWBorderPixel | CWEventMask, &windowAttribs);
@@ -799,7 +797,6 @@ int main(int argc, char** argv) {
 	XSetWindowAttributes windowAttribs;
 	windowAttribs.border_pixel = BlackPixel(display, screenId);
 	windowAttribs.background_pixel = WhitePixel(display, screenId);
-	windowAttribs.override_redirect = True;
 	windowAttribs.colormap = XCreateColormap(display, RootWindow(display, screenId), visual->visual, AllocNone);
 	windowAttribs.event_mask = ExposureMask;
 	window = XCreateWindow(display, RootWindow(display, screenId), 0, 0, 320, 200, 0, visual->depth, InputOutput, visual->visual, CWBackPixel | CWColormap | CWBorderPixel | CWEventMask, &windowAttribs);
@@ -1036,7 +1033,6 @@ int main(int argc, char** argv) {
 	XSetWindowAttributes windowAttribs;
 	windowAttribs.border_pixel = BlackPixel(display, screenId);
 	windowAttribs.background_pixel = WhitePixel(display, screenId);
-	windowAttribs.override_redirect = True;
 	windowAttribs.colormap = XCreateColormap(display, RootWindow(display, screenId), visual->visual, AllocNone);
 	windowAttribs.event_mask = ExposureMask;
 	window = XCreateWindow(display, RootWindow(display, screenId), 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 0, visual->depth, InputOutput, visual->visual, CWBackPixel | CWColormap | CWBorderPixel | CWEventMask, &windowAttribs);
