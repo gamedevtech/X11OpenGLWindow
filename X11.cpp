@@ -128,7 +128,6 @@ int main(int argc, char** argv) {
 	XSetWindowAttributes windowAttribs;
 	windowAttribs.border_pixel = BlackPixel(display, screenId);
 	windowAttribs.background_pixel = WhitePixel(display, screenId);
-	windowAttribs.override_redirect = True;
 	windowAttribs.colormap = XCreateColormap(display, RootWindow(display, screenId), visual->visual, AllocNone);
 	windowAttribs.event_mask = ExposureMask;
 	window = XCreateWindow(display, RootWindow(display, screenId), 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 0, visual->depth, InputOutput, visual->visual, CWBackPixel | CWColormap | CWBorderPixel | CWEventMask, &windowAttribs);
