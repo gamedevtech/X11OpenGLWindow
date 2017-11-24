@@ -1,10 +1,10 @@
-#Introduction
+# Introduction
 Most tutorials seem to start off with a discussion of how hard X is, how it will mess up your head and how only a masochist would ever write X code with alternates such as SDL out there. This, in my opinion is just wrong. In the trinity of major operating systems i think X is the sanest, most reliable and cleanest designed window manager. With that in mind, lets create an OpenGL enabled X11 window for video games.
 
-#Part 1, Creating a Window
+# Part 1, Creating a Window
 The X windowing system uses a client/server architecture. A single machine can have X running in multiple instances. 
 
-##Creating an X Window
+## Creating an X Window
 The first thing to do when opening a window under x is to tell it where the screen is. Altough there are several ways of telling the client where the server is, the most fullproof is the **DISPLAY** environment variable, or using *NULL* for default.
 
 The function ```XOpenDisplay(char* display)``` makes the connection to the X server. It takes one argument, a string using the display format described above, or *NULL* to use the default. It returns a pointer to the display (of type *Display*) on success or *NULL* on error.
@@ -29,7 +29,7 @@ At this point the window will not show up yet. First it must process messages (s
 
 After the window is finished, force the window to close with the ```XDestroyWindow(Display* display, Window window)``` function and cleanup the display using the ```XCloseDisplay(Display* display)``` function, which takes one argument, the display to close.
 
-###Sample Code (C)
+### Sample Code (C)
 ```
 #include <X11/Xlib.h>
 
@@ -76,13 +76,13 @@ LINUX: gcc -o XSampleWindow XSampleWindow.c -lX11 -L/usr/X11R6/lib -I/usr/X11R6/
 OSX: gcc -o XSampleWindow XSampleWindow.c -lX11 -L/usr/X11/lib -I/opt/X11/include
 ```
 
-#Part 2, Processing Events
+# Part 2, Processing Events
 To register for events use the ```XSelectInput(Display* display, uint mask)``` function, it takes as arguments the display object, the window object and a bitmask representing what events the message loop will subscribe to. This function should be called before the *XMapWindow* function.
 
 TODO: Event table listing
 http://tronche.com/gui/x/xlib/events/processing-overview.html
 
-##Keyboard Input
+## Keyboard Input
 To process keyboard input subscribe to three event masks *KeyPressMask* *KeyReleaseMask* and *KeymapStateMask*. The first two events will fire when a key is pressed or released. X handles mapping characters to key numbers, this mapping can change at any time if the user remaps keys. the KeyMask event is fired when the keymapping of the system changes. 
 
 Once subscribed to ```KeyPressMask | KeyReleaseMask | KeymapStateMask``` three events types will be fired, they are *KeyPress*, *KeyRelease* and *KeymapNotify*. Check the *type* variable of the *XEvent* object against these types.
@@ -91,7 +91,7 @@ In case the *KeyMapNotify* event is recieved, call the ```XRefreshKeyboardMappin
 
 If the *KeyPress* or *KeyRelease* events get fired use the ```int XLookupString(XKeyEvent *event_struct, char *buffer_return, int bytes_buffer, KeySym *keysym_return, XComposeStatus *status_in_out)``` function to translate the event into a **KeySym** (a *KeySym* is a typedef for an unsigned long coresponding to the keyID of the key pressed) and a string. *buffer_return* will hold the translated character string, *keysym_return* will hold the *KeySym* value. **keysymdef.h** holds a list of #define strings for each key.
 
-###Sample Code (C++)
+### Sample Code (C++)
 ```
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -167,7 +167,7 @@ LINUX: g++ -o XKeyIn XKeyIn.cpp -lX11 -L/usr/X11R6/lib -I/usr/X11R6/include
 OSX: g++ -o XKeyIn XKeyIn.cpp -lX11 -L/usr/X11/lib -I/opt/X11/include
 ```
 
-##Mouse Input
+## Mouse Input
 To process mouse events subscribe to the *PointerMotionMask*, *ButtonPressMask*, *ButtonReleaseMask*, *EnterWindowMask* and *LeaveWindowMask* event masks. These masks will fire the following events: *MotionNotify*, *ButtonPress*, *ButtonRelease*, *EnterNotify* and *LeaveNotify*.
 
 Masks:
@@ -177,7 +177,7 @@ On *ButtonPress* and *ButtonRelease* the event object will contains an *xbutton*
 
 On *MotionNotify* the event object will contain a *xmotion* field. This field has two variables *x* and *y*. The *x* and *y* variables contain the mouses position in window space.
 
-###Sample Code (C++)
+### Sample Code (C++)
 ```
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -267,7 +267,7 @@ int main(int argc, char** argv) {
 }
 ```
 
-##Window Size & Title
+## Window Size & Title
 Set the window's title using the ```XStoreName(Display* d, Window w, char *window_name)``` function. The first argument is the display link, the second argument is the window object and the third argument is the new window title.
 
 Query the size of the current window with the ```XGetWindowAttributes(Display* d, Window w, XWindowAttributes* winAttribs);``` function. The first argument is the display link, the second is the window object. The third argument is a *XWindowAttributes* object, this object has two fields *width* and *height*.
@@ -276,7 +276,7 @@ When a window is resized the *Expose* event is fired, listen for this event by s
 
 At runtime the width, height and position of the window can be changed with the ```XConfigureWindow(Display* d, Window w, uint value_mask, XWindowChanges *values;``` function. The first argument is the display link, the second argument is the window. The third argument is an unsigned int, this is a bitmask representing which fields of the fourth argument to use. The fourth argument is a pointer to a *XWindowChanges* structure. Valid values for the mask are: *CWX*, *CWY*, *CWWidth*, *CWHeight*, *CWBorderWidth*, *CWSibling* and *CWStackMode*. The *XWindowChanges* struct has the following fields: ```int x, y```, ```int width, height```, ```int border_width```, ```Window sibling``` and ```int stack_mode```.
 
-###Sample Code (C++)
+### Sample Code (C++)
 ```
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -346,9 +346,9 @@ int main(int argc, char** argv) {
 }
 ```
 
-#Part 3, OpenGL
+# Part 3, OpenGL
 OpenGL on X11 is done trough the X11 library, include the ```<GL/glx.h>``` header.
-##Enabling OpenGL
+## Enabling OpenGL
 Before showing the window with *XMapRaised* it's a good idea to check the version of GLX available. Note, the **GLX version is not the same as the OpenGL version**. This can be done with the ```glXQueryVersion(Display* display, GLint* major, GLint* minor)``` function. The first argument is a pointer to the display object, the second two arguments are integer pointer that will have the major and minor version number written to them. If the minimum version of OpenGL is not supported, exit the program. A good minimum verions is 1.2
 ```
 GLint majorGLX, minorGLX = 0;
@@ -422,7 +422,7 @@ glEnd();
 glXSwapBuffers(display, window);
 ```
 Finally, once the update loop has finishes the context must be destroyed with the ```glXDestroyContext(Display* display, GLXContext context)``` function. The *Visual* needs to be cleaned up with **XFree** and the display and color map association should be destroyed with **XFreeColormap**
-###Sample Code (C++)
+### Sample Code (C++)
 ```
 #include <iostream>
 #include <X11/Xlib.h>
@@ -543,7 +543,7 @@ int main(int argc, char** argv) {
 }
 ```
 
-##Getting a modern context
+## Getting a modern context
 Finding information on how to get a modern OpenGL context on X11 was rather difficult. Much of this part is adapted from https://www.opengl.org/wiki/Tutorial:_OpenGL_3.0_Context_Creation_(GLX). First, lets define a type for the ```glXCreateContextAttribsARB``` function and create a function that checks for supported extensions, this function will take two arguments, the extension list and target extension that is being queried.
 ```
 typedef GLXContext (*glXCreateContextAttribsARBProc)(Display*, GLXFBConfig, GLXContext, Bool, const int*);
@@ -652,7 +652,7 @@ else {
 	std::cout << "Direct GLX rendering context obtained\n";
 }
 ```
-###Sample Code (C++)
+### Sample Code (C++)
 ```
 #include <iostream>
 #include <cstring>
@@ -887,7 +887,7 @@ int main(int argc, char** argv) {
 	return 0;
 }
 ```
-#Part 4, Putting it all together
+# Part 4, Putting it all together
 Before putting all the pieces together, there is one more problem with the current implementation of the window. In order to close the window properly the **DestroyNotify** message needs to be handled. If *DestroyNotify* is recieved, the main loop should stop. To make the close button work, the **DeleteWindow** message must be treated as a client message; to remap it place the following code after the window was created, but before it is raised:
 ```
 Atom atomWmDeleteWindow = XInternAtom(display, "WM_DELETE_WINDOW", False);
@@ -905,7 +905,7 @@ else if (ev.type == DestroyNotify) {
     break;
 }
 ```
-###Sample Code (C++)
+### Sample Code (C++)
 ```
 #include <iostream>
 #include <cstring>
@@ -1188,7 +1188,7 @@ void Shutdown() {
 #endif
 ```
 
-#Sources
+# Sources
 * http://xopendisplay.hilltopia.ca/2009/Jan/Xlib-tutorial-part-1----Beginnings.html
 * http://tronche.com/gui/x/xlib/display/opening.html
 * http://techpubs.sgi.com/library/dynaweb_docs/0640/SGI_Developer/books/OpenGL_Porting/sgi_html/ch04.html
