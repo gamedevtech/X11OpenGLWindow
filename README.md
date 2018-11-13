@@ -347,7 +347,7 @@ int main(int argc, char** argv) {
 ```
 
 #Part 3, OpenGL
-OpenGL on X11 is done trough the X11 library, include the ```<GL/glx.h>``` header.
+OpenGL on X11 is done through the X11 library, include the ```<GL/glx.h>``` header.
 ##Enabling OpenGL
 Before showing the window with *XMapRaised* it's a good idea to check the version of GLX available. Note, the **GLX version is not the same as the OpenGL version**. This can be done with the ```glXQueryVersion(Display* display, GLint* major, GLint* minor)``` function. The first argument is a pointer to the display object, the second two arguments are integer pointer that will have the major and minor version number written to them. If the minimum version of OpenGL is not supported, exit the program. A good minimum verions is 1.2
 ```
@@ -618,7 +618,7 @@ if (visual == 0) {
 	return 1;
 }
 ```
-A pointer to the **glXCreateContextAttribsARB** function needs to be acquired trough the ```glXGetProcAddressARB(const GLubyte * strFuncName)``` function.
+A pointer to the **glXCreateContextAttribsARB** function needs to be acquired through the ```glXGetProcAddressARB(const GLubyte * strFuncName)``` function.
 ```
 glXCreateContextAttribsARBProc glXCreateContextAttribsARB = 0;
 glXCreateContextAttribsARB = (glXCreateContextAttribsARBProc) glXGetProcAddressARB( (const GLubyte *) "glXCreateContextAttribsARB" );
